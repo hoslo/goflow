@@ -1,0 +1,19 @@
+app:
+  RuntimeRootPath: /runtime/
+  LogSavePath: logs/
+  LogSaveName: log
+  LogFileExt: log
+  TimeFormat: 20060102
+
+server:
+  RunMode: debug
+  HTTPPort: 8000
+  ReadTimeout: 60
+  WriteTimeout: 60
+
+database:
+  Type: sqlite
+  User: root
+  Password: 813520
+  Host: 127.0.0.1:3306
+  Name: go_flow
