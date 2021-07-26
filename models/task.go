@@ -1,16 +1,20 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Task struct {
 	gorm.Model
-	Name          string
-	MaxTryCount   int
-	WaitTime      int
-	OperatorType  string
-	OperatorId    uint
-	StaticArgs    string
-	HasParentArgs int
+	DagId		 uint `gorm:"index" json:"dag_id"`
+	IsRoot       bool  `json:"is_root"`
+	Name          string `json:"name"`
+	MaxTryCount   int `json:"max_try_count"`
+	WaitTime      int `json:"wait_time"`
+	OperatorType  string `json:"operator_type"`
+	OperatorId    uint `json:"operator_id"`
+	StaticArgs    string `json:"static_args"`
+	HasParentArgs int `json:"has_parent_args"`
 }
 
 func (t *Task) NewTask(name string, operatorType string, operatorId uint, staticArgs string) *Task {
@@ -24,29 +28,57 @@ func (t *Task) NewTask(name string, operatorType string, operatorId uint, static
 
 type TaskInstance struct {
 	gorm.Model
-	TaskId     int
-	TaskStatus int
-	TryCount   int
-	Message    string
+	DagId      uint `json:"dag_id"`
+	TaskId     uint `json:"task_id"`
+	DagInstanceId      string `json:"dag_instance_id"`
+	OperatorInstanceId uint `json:"operator_instance_id"`
+	OperatorInstanceType  string `json:"operator_instance_type"`
+	TaskStatus int `json:"task_status"`
+	TryCount   int `json:"try_count"`
+	Message    string `json:"message"`
 }
 
-func (ti *TaskInstance) NewTaskInstance(taskId int) *TaskInstance {
+func NewTaskInstance(dagInstanceId string, dagId uint, taskId uint, operatorInstanceId uint, operatorInstanceType string) *TaskInstance {
 	return &TaskInstance{
 		TaskId:     taskId,
+		DagId:     dagId,
+		DagInstanceId:     dagInstanceId,
 		TaskStatus: 1,
+		OperatorInstanceId: operatorInstanceId,
+		OperatorInstanceType: operatorInstanceType,
 	}
 }
 
-func AddTask(dagId uint, task *Task) (*Task, error) {
-	result := db.Create(&task)
+func AddTaskInstance(TaskInstance *TaskInstance) (*TaskInstance, error) {
+	result := db.Create(&TaskInstance)
+
+	return TaskInstance, result.Error
+}
+
+func UpdateTaskInstance(TaskInstance *TaskInstance) (*TaskInstance, error) {
+	result := db.Updates(&TaskInstance)
+
+	return TaskInstance, result.Error
+}
+
+func QueryTaskInstances(dagId uint) ([]TaskInstance, error) {
+	taskInstances := []TaskInstance{}
+	result := db.Where("dag_id = ?", dagId).Find(&taskInstances)
+
+	return taskInstances, result.Error
+}
+
+func ExistTaskByName(task *Task) error {
+	result := db.Debug().Where("name = ?", task.Name).First(task)
 	if result.Error != nil {
-		return nil, result.Error
+		return result.Error
 	}
-	dagToTask := DAGToTask{
-		TaskId: task.ID,
-		DAGId:  dagId,
-	}
-	result = db.Create(&dagToTask)
+
+	return nil
+}
+
+func AddTask(task *Task) (*Task, error) {
+	result := db.Create(&task)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -59,32 +91,14 @@ func DeleteTask(task *Task) (*Task, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
-	dagToTask := DAGToTask{
-		TaskId: task.ID,
-	}
-	result = db.Delete(&dagToTask)
-	if result.Error != nil {
-		return nil, result.Error
-	}
 
 	return task, nil
 }
 
 func QueryTasks(dagId uint) ([]Task, error) {
-	var dagToTasks []DAGToTask
-	result := db.Where("dag_id = ?", dagId).Find(&dagToTasks)
-	if result.Error != nil {
-		return nil, result.Error
-	}
-	var taskIds []uint
-	for _, dagToTask := range dagToTasks {
-		taskIds = append(taskIds, dagToTask.TaskId)
-	}
 
 	tasks := []Task{}
-	if len(taskIds) != 0 {
-		result = db.Where("id in ?", taskIds).Find(&tasks)
-	}
+	result := db.Where("dag_id = ?", dagId).Find(&tasks)
 
 	return tasks, result.Error
 }

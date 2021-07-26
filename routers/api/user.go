@@ -36,16 +36,10 @@ func CreateUser(c *gin.Context)  {
 
 	user := &models.User{Username: a.Username, Password: a.Password}
 
-	err = user.CreateUser()
-	if err == nil {
-		appG.Response(http.StatusOK, e.ERROR_EXIST_USERNAME, nil)
-		return
-	}
 
 	err = user.CreateUser()
 	if err != nil {
-		fmt.Println(22222222, err)
-		appG.Response(http.StatusInternalServerError, e.ERROR_AUTH_TOKEN, nil)
+		appG.Response(http.StatusOK, e.ERROR_EXIST_USERNAME, nil)
 		return
 	}
 

@@ -9,6 +9,8 @@ require (
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.2
 	github.com/json-iterator/go v1.1.11
+	github.com/robfig/cron/v3 v3.0.0
+	github.com/satori/go.uuid v1.2.0 // indirect
 	github.com/spf13/viper v1.8.1
 	gorm.io/driver/mysql v1.1.1
 	gorm.io/gorm v1.21.12

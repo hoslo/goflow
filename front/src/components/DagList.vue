@@ -12,7 +12,7 @@
         >
     </el-table-column>
     <el-table-column
-        prop="Name"
+        prop="name"
         label="名称"
         >
     </el-table-column>
@@ -30,7 +30,8 @@
         label="操作"
         >
       <template #default="scope">
-        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+        <el-button @click="toTask(scope.row)" type="text" size="small">查看任务</el-button>
+        <el-button @click="toTaskInstance(scope.row)" type="text" size="small">查看任务日志</el-button>
         <el-button type="text" size="small">编辑</el-button>
       </template>
     </el-table-column>
@@ -46,9 +47,14 @@ export default {
     return {}
   },
   methods: {
-    handleClick(row) {
+    toTask(row) {
       console.log(row);
       this.$router.push({name: "dag", params: {id: row.ID}})
+    },
+
+    toTaskInstance(row) {
+      console.log(row);
+      this.$router.push({name: "task", params: {id: row.ID}})
     },
 
     getDAGList() {

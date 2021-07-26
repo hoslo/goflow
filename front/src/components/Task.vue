@@ -13,13 +13,13 @@
     >
     </el-table-column>
     <el-table-column
-        prop="name"
-        label="名称"
+        prop="task_id"
+        label="task_id"
     >
     </el-table-column>
     <el-table-column
-        prop="is_root"
-        label="根节点"
+        prop="dag_instance_id"
+        label="dag_instance_id"
     >
     </el-table-column>
     <el-table-column
@@ -36,7 +36,7 @@
         label="操作"
     >
       <template #default="scope">
-        <el-button @click="updateTask(scope.row)" type="text" size="small">编辑</el-button>
+        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
         <el-button type="text" size="small">编辑</el-button>
       </template>
     </el-table-column>
@@ -49,18 +49,18 @@ export default {
   mounted() {
     console.log(this.$route.params.id)
 
-    this.getDAG();
+    this.getTaskInstances();
 
     return {}
   },
   methods: {
-    updateTask(row) {
+    handleClick(row) {
       console.log(row);
     },
 
-    getDAG() {
+    getTaskInstances() {
       let that = this;
-      this.axios.get("http://127.0.0.1:8000/get_tasks", {
+      this.axios.get("http://127.0.0.1:8000/get_task_instances", {
         headers: {
           token: localStorage.token
         },
@@ -69,7 +69,7 @@ export default {
         }
       }).then(function (response) {
         console.log(response)
-        that.tableData = response.data.data.tasks;
+        that.tableData = response.data.data.task_instances;
       })
     }
   },

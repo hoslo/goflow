@@ -80,8 +80,10 @@ func InitDatabase() {
 	DatabaseSetting.Name = database.GetString("Name")
 }
 
+
 func Setup() {
 	InitServer()
 	InitApp()
 	InitDatabase()
 }
+

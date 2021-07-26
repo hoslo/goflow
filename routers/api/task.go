@@ -12,7 +12,7 @@ import (
 	"strconv"
 )
 
-func GetTasks(c *gin.Context)  {
+func GetTaskInstances(c *gin.Context)  {
 	appG := app.Gin{C: c}
 
 	token := c.Request.Header.Get("token")
@@ -28,37 +28,37 @@ func GetTasks(c *gin.Context)  {
 		return
 	}
 
-	tasks, err := models.QueryTasks(uint(id))
+	taskInstances, err := models.QueryTaskInstances(uint(id))
 	if err != nil {
 		appG.Response(http.StatusInternalServerError, e.ERROR, nil)
 		return
 	}
 
 	appG.Response(http.StatusOK, e.SUCCESS, gin.H{
-		"tasks" : tasks,
+		"task_instances" : taskInstances,
 	})
 }
+
+type Task struct {
+	*models.Task
+	ParentTasks []uint `json:"parent_tasks"`
+}
+
 
 func CreateTask(c *gin.Context)  {
 	appG := app.Gin{C: c}
 
 	token := c.Request.Header.Get("token")
-	id, err := strconv.ParseUint(c.Query("id"), 10,64)
-	if err != nil {
-		fmt.Println(0000, err)
-		appG.Response(http.StatusInternalServerError, e.ERROR, nil)
-		return
-	}
 
 
-	_, err = util.ParseUser(token)
+	_, err := util.ParseUser(token)
 	if err != nil {
 		fmt.Println(1111, err)
 		appG.Response(http.StatusInternalServerError, e.ERROR, nil)
 		return
 	}
 
-	task := &models.Task{}
+	task := &Task{}
 
 	if err := c.ShouldBindBodyWith(&task, binding.JSON); err != nil {
 		fmt.Println(2222, err)
@@ -66,11 +66,28 @@ func CreateTask(c *gin.Context)  {
 		return
 	}
 
-	_, err = models.AddTask(uint(id), task)
+	err = models.ExistTaskByName(task.Task)
+	if err == nil {
+		fmt.Println(3333, err)
+		appG.Response(http.StatusInternalServerError, e.ERROR, nil)
+		return
+	}
+
+
+	task.Task, err = models.AddTask(task.Task)
 	if err != nil {
 		fmt.Println(3333, err)
 		appG.Response(http.StatusInternalServerError, e.ERROR, nil)
 		return
+	}
+
+	if len(task.ParentTasks) != 0 {
+		err = models.AddTaskToTask(task.ParentTasks, task.Task.ID)
+		if err != nil {
+			fmt.Println(3333, err)
+			appG.Response(http.StatusInternalServerError, e.ERROR, nil)
+			return
+		}
 	}
 
 	appG.Response(http.StatusOK, e.SUCCESS, gin.H{
@@ -100,3 +117,32 @@ func DeleteTask(c *gin.Context)  {
 		"dag" : task,
 	})
 }
+
+func GetTasks(c *gin.Context)  {
+	appG := app.Gin{C: c}
+
+	token := c.Request.Header.Get("token")
+	id, err := strconv.ParseUint(c.Query("id"), 10,64)
+	if err != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR, nil)
+		return
+	}
+
+	_, err = util.ParseUser(token)
+	if err != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR, nil)
+		return
+	}
+
+	tasks, err := models.QueryTasks(uint(id))
+	if err != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR, nil)
+		return
+	}
+
+	appG.Response(http.StatusOK, e.SUCCESS, gin.H{
+		"tasks" : tasks,
+	})
+}
+
+

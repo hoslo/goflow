@@ -6,14 +6,13 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"goflow/models"
 	"goflow/pkg/app"
-	"goflow/pkg/cronjob"
 	"goflow/pkg/e"
 	"goflow/pkg/util"
 	"net/http"
 	"strconv"
 )
 
-func CreateDAG(c *gin.Context)  {
+func CreateHttpOperator(c *gin.Context)  {
 	appG := app.Gin{C: c}
 
 	token := c.Request.Header.Get("token")
@@ -25,60 +24,51 @@ func CreateDAG(c *gin.Context)  {
 		return
 	}
 
-	dag := &models.DAG{}
+	HttpOperator := &models.HttpOperator{}
 
-	if err := c.ShouldBindBodyWith(&dag, binding.JSON); err != nil {
+	if err := c.ShouldBindBodyWith(&HttpOperator, binding.JSON); err != nil {
 		fmt.Println(2222, err)
 		appG.Response(http.StatusInternalServerError, e.ERROR, nil)
 		return
 	}
 
-	_, err = cronjob.Cron.AddJob(dag.CronExpression, dag)
-	if err != nil {
-		fmt.Println(4444, err, dag.CronExpression)
-		appG.Response(http.StatusInternalServerError, e.ERROR, nil)
-		return
-	}
-
-	dag.UserId = user.ID
-	dag, err = models.AddDAG(dag)
+	HttpOperator.UserId = user.ID
+	HttpOperator.Method = "POST"
+	HttpOperator, err = models.AddHttpOperator(HttpOperator)
 	if err != nil {
 		fmt.Println(3333, err)
 		appG.Response(http.StatusInternalServerError, e.ERROR, nil)
 		return
 	}
 
-
 	appG.Response(http.StatusOK, e.SUCCESS, gin.H{
-		"dag" : dag,
+		"httpoperator" : HttpOperator,
 	})
 }
 
-func GetDAGs(c *gin.Context)  {
+func GetHttpOperators(c *gin.Context)  {
 	appG := app.Gin{C: c}
 
 	token := c.Request.Header.Get("token")
 
 	user, err := util.ParseUser(token)
 	if err != nil {
-		fmt.Println(11111111, err)
 		appG.Response(http.StatusInternalServerError, e.ERROR, nil)
 		return
 	}
 
-	dags, err := models.QueryDAGs(user.ID)
+	HttpOperators, err := models.QueryHttpOperators(user.ID)
 	if err != nil {
-		fmt.Println(2222222222, err)
 		appG.Response(http.StatusInternalServerError, e.ERROR, nil)
 		return
 	}
 
 	appG.Response(http.StatusOK, e.SUCCESS, gin.H{
-		"dags" : dags,
+		"httpoperators" : HttpOperators,
 	})
 }
 
-func GetDAG(c *gin.Context)  {
+func GetHttpOperator(c *gin.Context)  {
 	appG := app.Gin{C: c}
 
 	token := c.Request.Header.Get("token")
@@ -94,28 +84,28 @@ func GetDAG(c *gin.Context)  {
 		return
 	}
 
-	dag, err := models.QueryDAG(uint(id))
+	HttpOperator, err := models.QueryHttpOperator(uint(id))
 	if err != nil {
 		appG.Response(http.StatusInternalServerError, e.ERROR, nil)
 		return
 	}
 
 	appG.Response(http.StatusOK, e.SUCCESS, gin.H{
-		"dag" : dag,
+		"httpoperator" : HttpOperator,
 	})
 }
 
-func DeleteDAG(c *gin.Context)  {
+func DeleteHttpOperator(c *gin.Context)  {
 	appG := app.Gin{C: c}
 
-	dag := models.DAG{}
+	HttpOperator := models.HttpOperator{}
 
-	if err := c.ShouldBindBodyWith(&dag, binding.JSON); err != nil {
+	if err := c.ShouldBindBodyWith(&HttpOperator, binding.JSON); err != nil {
 		appG.Response(http.StatusInternalServerError, e.ERROR, nil)
 	}
 
-	if dag.ID != 0 {
-		_, err := models.DeleteDAG(&dag)
+	if HttpOperator.ID != 0 {
+		_, err := models.DeleteHttpOperator(&HttpOperator)
 		if err != nil {
 			appG.Response(http.StatusInternalServerError, e.ERROR, nil)
 		}
@@ -124,6 +114,6 @@ func DeleteDAG(c *gin.Context)  {
 	}
 
 	appG.Response(http.StatusOK, e.SUCCESS, gin.H{
-		"dag" : dag,
+		"httpoperator" : HttpOperator,
 	})
 }

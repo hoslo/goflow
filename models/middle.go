@@ -2,35 +2,40 @@ package models
 
 import "gorm.io/gorm"
 
-type UserToDAG struct {
-	gorm.Model
-	UserId uint
-	DAGId  uint
-}
-
-type DAGToTask struct {
-	gorm.Model
-	DAGId  uint
-	TaskId uint
-	IsRoot int8
-}
-
 type TaskToTask struct {
 	gorm.Model
-	MainTaskId uint
-	TaskId     uint
-	IsParent   int8
+	ParentTaskId uint
+	ChildTaskId uint
 }
 
-type TaskToOperator struct {
-	gorm.Model
-	TaskId       uint
-	OperatorId   uint
-	OperatorType string
+func QueryChildTasks(parentTaskId uint) ([]Task, error) {
+	taskToTasks := []TaskToTask{}
+	err := db.Where("parent_task_id = ?", parentTaskId).Find(&taskToTasks).Error
+
+	if err != nil {
+		return nil, err
+	}
+	childTaskIds := []uint{}
+	for _, taskToTask := range taskToTasks {
+		childTaskIds = append(childTaskIds, taskToTask.ChildTaskId)
+	}
+
+	childTasks := []Task{}
+	err = db.Where("id in ?", childTaskIds).Find(&childTasks).Error
+
+	return childTasks, err
 }
 
-type TaskToTaskInstance struct {
-	gorm.Model
-	TaskId       uint
-	TaskInstance uint
+func AddTaskToTask(parentTaskIds []uint, childTaskId uint) error {
+	taskToTasks := []TaskToTask{}
+	for _, parentTaskId := range parentTaskIds {
+		taskToTasks = append(taskToTasks, TaskToTask{
+			ParentTaskId: parentTaskId,
+			ChildTaskId: childTaskId,
+		})
+	}
+
+	err := db.Create(taskToTasks).Error
+
+	return err
 }

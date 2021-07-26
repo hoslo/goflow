@@ -7,8 +7,9 @@
           mode="horizontal"
           background-color="#23262E"
           text-color="#fff"
-          active-text-color="#ffd04b">
-        <el-menu-item index="3">任务中心</el-menu-item>
+          active-text-color="#ffd04b"
+          router="true">
+        <el-menu-item index="/dag_list">任务中心</el-menu-item>
         <el-menu-item index="4">用户管理</el-menu-item>
       </el-menu>
     </el-header>
@@ -35,67 +36,73 @@
       </el-aside>
       <el-container>
         <el-main>
-          <el-row>
-            <el-button type="primary" @click="dialogFormVisible = true">创建DAG</el-button>
-
-            <el-dialog title="DAG" v-model="dialogFormVisible" width="30%">
-              <el-form :model="form">
-                <el-form-item label="名称" :label-width="formLabelWidth">
-                  <el-input v-model="form.name"></el-input>
-                </el-form-item>
-                  <el-form-item label="cron表达式" :label-width="formLabelWidth">
-                    <el-input v-model="form.cron_expression"></el-input>
-                  </el-form-item>
-              </el-form>
-              <template #footer>
-    <span class="dialog-footer">
-      <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="createDag">确 定</el-button>
-    </span>
-              </template>
-            </el-dialog>
-          </el-row>
-          <DagList :key="timer"></DagList>
+          <Task :key="timer"></Task>
         </el-main>
         <el-footer>Footer</el-footer>
       </el-container>
     </el-container>
   </el-container>
-
 </template>
 
 <script>
-import DagList from "@/components/DagList";
-
+import Task from "@/components/Task";
 export default {
-  components: {DagList},
+  name: "DashboardDag",
+  components: {Task},
+  mounted() {
+
+    return {}
+  },
   data() {
-    return {
-      dialogFormVisible: false,
-      timer: "",
-      form: {
-        name: "",
-        cron_expression: ""
-      },
-      formLabelWidth: '80px'
-    }
+    return {}
   },
   methods: {
-    createDag() {
+    createTask() {
       let that = this;
-      this.axios.post("http://127.0.0.1:8000/create_dag", {
-        name: that.form.name,
-        cron_expression: that.form.cron_expression
+      console.log(this.task)
+      this.axios.post("http://127.0.0.1:8000/create_task", {
+        name: that.task.name,
+        is_root: that.task.is_root,
+        dag_id: Number(that.$route.params.id),
+        max_try_count: Number(that.task.max_try_count),
+        wait_time: Number(that.task.wait_time),
+        operator_type: that.task.operator_type,
+        operator_id: that.task.operator_id,
+        parent_id: that.task.parent_id
       }, {
         headers: {
           token: localStorage.token
-        }
+        },
       })
       this.dialogFormVisible = false;
       this.timer = new Date().getTime();
+    },
+    openCreateTask () {
+      this.dialogFormVisible = true;
+      let that = this;
+      this.axios.get("http://127.0.0.1:8000/get_httpoperators", {
+        headers: {
+          token: localStorage.token
+        }
+      }).then(function (response) {
+        console.log(response)
+        that.httpoperators = response.data.data.httpoperators;
+      })
+      this.axios.get("http://127.0.0.1:8000/get_tasks", {
+        headers: {
+          token: localStorage.token
+        },
+        params: {
+          id: that.$route.params.id
+        }
+      }).then(function (response) {
+        console.log(response)
+        that.tasks = response.data.data.tasks;
+      })
     }
 
   }
+
 }
 </script>
 
@@ -112,14 +119,6 @@ export default {
   width: 100%;
 }
 
-.el-header {
-  background-color: #23262E;
-  color: #333;
-  text-align: center;
-  line-height: 60px;
-  padding: 0;
-}
-
 .el-aside {
   background-color: #333333;
   color: #333;
@@ -133,6 +132,14 @@ export default {
   text-align: center;
   line-height: 160px;
   margin: 0;
+  padding: 0;
+}
+
+.el-header {
+  background-color: #23262E;
+  color: #333;
+  text-align: center;
+  line-height: 60px;
   padding: 0;
 }
 

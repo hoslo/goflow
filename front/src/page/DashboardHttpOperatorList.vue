@@ -36,26 +36,26 @@
       <el-container>
         <el-main>
           <el-row>
-            <el-button type="primary" @click="dialogFormVisible = true">创建DAG</el-button>
+            <el-button type="primary" @click="dialogFormVisible = true">创建HttpOperator</el-button>
 
             <el-dialog title="DAG" v-model="dialogFormVisible" width="30%">
               <el-form :model="form">
                 <el-form-item label="名称" :label-width="formLabelWidth">
                   <el-input v-model="form.name"></el-input>
                 </el-form-item>
-                  <el-form-item label="cron表达式" :label-width="formLabelWidth">
-                    <el-input v-model="form.cron_expression"></el-input>
-                  </el-form-item>
+                <el-form-item label="URL" :label-width="formLabelWidth">
+                  <el-input v-model="form.url"></el-input>
+                </el-form-item>
               </el-form>
               <template #footer>
     <span class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="createDag">确 定</el-button>
+      <el-button type="primary" @click="createHttpOperator">确 定</el-button>
     </span>
               </template>
             </el-dialog>
           </el-row>
-          <DagList :key="timer"></DagList>
+          <HttpOperatorList :key="timer"></HttpOperatorList>
         </el-main>
         <el-footer>Footer</el-footer>
       </el-container>
@@ -65,27 +65,26 @@
 </template>
 
 <script>
-import DagList from "@/components/DagList";
-
+import HttpOperatorList from "@/components/HttpOperatorList";
 export default {
-  components: {DagList},
-  data() {
+  components: {HttpOperatorList},
+  data () {
     return {
       dialogFormVisible: false,
       timer: "",
+      formLabelWidth: '80px',
       form: {
         name: "",
-        cron_expression: ""
-      },
-      formLabelWidth: '80px'
+        url: "",
+      }
     }
   },
   methods: {
-    createDag() {
+    createHttpOperator() {
       let that = this;
-      this.axios.post("http://127.0.0.1:8000/create_dag", {
+      this.axios.post("http://127.0.0.1:8000/create_httpoperator", {
         name: that.form.name,
-        cron_expression: that.form.cron_expression
+        url: that.form.url,
       }, {
         headers: {
           token: localStorage.token
@@ -94,7 +93,6 @@ export default {
       this.dialogFormVisible = false;
       this.timer = new Date().getTime();
     }
-
   }
 }
 </script>

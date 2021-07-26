@@ -43,7 +43,25 @@
       <recent name="D:\projects\goflow\front\src\page]" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build operator.go">
+  <component name="RunManager" selected="Go Build.go build main.go (1)">
+    <configuration name="go build goflow/main" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="goflow" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <filePath value="$PROJECT_DIR$/main/main.go" />
+      <package value="goflow/main" />
+      <directory value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build main.go (1)" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="goflow" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$/main/main.go" />
+      <package value="goflow" />
+      <directory value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
     <configuration name="go build main.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true">
       <module name="goflow" />
       <working_directory value="$PROJECT_DIR$" />
@@ -75,10 +93,14 @@
       <item itemvalue="Go Build.go build main.go" />
       <item itemvalue="Go Build.go build models.go" />
       <item itemvalue="Go Build.go build operator.go" />
+      <item itemvalue="Go Build.go build goflow/main" />
+      <item itemvalue="Go Build.go build main.go (1)" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Go Build.go build main.go" />
+        <item itemvalue="Go Build.go build main.go (1)" />
+        <item itemvalue="Go Build.go build goflow/main" />
         <item itemvalue="Go Build.go build operator.go" />
         <item itemvalue="Go Build.go build models.go" />
       </list>
@@ -96,41 +118,42 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="530" y="54" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010/-1920.-35.1920.1040@0.0.1680.1010" timestamp="1626951876240" />
-    <state x="755" y="303" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1627092234131">
+    <state x="755" y="303" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1627109314733">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state x="755" y="303" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2048.1112@0.0.2048.1112" timestamp="1627092234131" />
+    <state x="755" y="303" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2048.1112@0.0.2048.1112" timestamp="1627109314733" />
     <state x="620" y="260" key="FileChooserDialogImpl" timestamp="1626951417849">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="260" key="FileChooserDialogImpl/0.0.1680.1010/-1920.-35.1920.1040@0.0.1680.1010" timestamp="1626951417849" />
-    <state width="2005" height="272" key="GridCell.Tab.0.bottom" timestamp="1627090397824">
+    <state width="2005" height="258" key="GridCell.Tab.0.bottom" timestamp="1627205842555">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state width="1637" height="272" key="GridCell.Tab.0.bottom/0.0.1680.1010/-1920.-35.1920.1040@0.0.1680.1010" timestamp="1627038254892" />
-    <state width="2005" height="272" key="GridCell.Tab.0.bottom/0.0.2048.1112@0.0.2048.1112" timestamp="1627090397824" />
-    <state width="2005" height="272" key="GridCell.Tab.0.center" timestamp="1627090397824">
+    <state width="2005" height="258" key="GridCell.Tab.0.bottom/0.0.2048.1112@0.0.2048.1112" timestamp="1627205842555" />
+    <state width="2005" height="258" key="GridCell.Tab.0.center" timestamp="1627205842555">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state width="1637" height="272" key="GridCell.Tab.0.center/0.0.1680.1010/-1920.-35.1920.1040@0.0.1680.1010" timestamp="1627038254892" />
-    <state width="2005" height="272" key="GridCell.Tab.0.center/0.0.2048.1112@0.0.2048.1112" timestamp="1627090397824" />
-    <state width="2005" height="272" key="GridCell.Tab.0.left" timestamp="1627090397824">
+    <state width="2005" height="258" key="GridCell.Tab.0.center/0.0.2048.1112@0.0.2048.1112" timestamp="1627205842555" />
+    <state width="2005" height="258" key="GridCell.Tab.0.left" timestamp="1627205842555">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state width="1637" height="272" key="GridCell.Tab.0.left/0.0.1680.1010/-1920.-35.1920.1040@0.0.1680.1010" timestamp="1627038254891" />
-    <state width="2005" height="272" key="GridCell.Tab.0.left/0.0.2048.1112@0.0.2048.1112" timestamp="1627090397824" />
-    <state width="2005" height="272" key="GridCell.Tab.0.right" timestamp="1627090397824">
+    <state width="2005" height="258" key="GridCell.Tab.0.left/0.0.2048.1112@0.0.2048.1112" timestamp="1627205842555" />
+    <state width="2005" height="258" key="GridCell.Tab.0.right" timestamp="1627205842555">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state width="1637" height="272" key="GridCell.Tab.0.right/0.0.1680.1010/-1920.-35.1920.1040@0.0.1680.1010" timestamp="1627038254892" />
-    <state width="2005" height="272" key="GridCell.Tab.0.right/0.0.2048.1112@0.0.2048.1112" timestamp="1627090397824" />
+    <state width="2005" height="258" key="GridCell.Tab.0.right/0.0.2048.1112@0.0.2048.1112" timestamp="1627205842555" />
     <state x="341" y="149" key="SettingsEditor" timestamp="1627015679693">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="341" y="149" key="SettingsEditor/0.0.1680.1010/-1920.-35.1920.1040@0.0.1680.1010" timestamp="1627015679693" />
-    <state x="542" y="237" width="596" height="594" key="find.popup" timestamp="1627037345311">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="661" y="261" width="727" height="654" key="find.popup" timestamp="1627195695928">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="542" y="237" width="596" height="594" key="find.popup/0.0.1680.1010/-1920.-35.1920.1040@0.0.1680.1010" timestamp="1627037345311" />
+    <state x="661" y="261" width="727" height="654" key="find.popup/0.0.2048.1112@0.0.2048.1112" timestamp="1627195695928" />
   </component>
 </project>

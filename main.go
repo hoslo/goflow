@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"goflow/models"
+	"goflow/pkg/cronjob"
 	"goflow/pkg/setting"
 	"goflow/routers"
 	"log"
@@ -13,9 +14,13 @@ import (
 func init()  {
 	setting.Setup()
 	models.SetUp()
+	cronjob.InitCron()
 }
 
+
+
 func main() {
+
 	gin.SetMode(setting.ServerSetting.RunMode)
 
 	routersInit := routers.InitRouter()

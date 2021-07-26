@@ -1,6 +1,4 @@
-
 <template>
-  <div></div>
   <el-table
       :data="tableData"
       border
@@ -18,8 +16,8 @@
     >
     </el-table-column>
     <el-table-column
-        prop="is_root"
-        label="根节点"
+        prop="url"
+        label="URL"
     >
     </el-table-column>
     <el-table-column
@@ -36,7 +34,7 @@
         label="操作"
     >
       <template #default="scope">
-        <el-button @click="updateTask(scope.row)" type="text" size="small">编辑</el-button>
+        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
         <el-button type="text" size="small">编辑</el-button>
       </template>
     </el-table-column>
@@ -47,36 +45,34 @@
 
 export default {
   mounted() {
-    console.log(this.$route.params.id)
-
-    this.getDAG();
+    this.getDAGList()
 
     return {}
   },
   methods: {
-    updateTask(row) {
+    handleClick(row) {
       console.log(row);
+      this.$router.push({name: "dag", params: {id: row.ID}})
     },
 
-    getDAG() {
+    getDAGList() {
       let that = this;
-      this.axios.get("http://127.0.0.1:8000/get_tasks", {
+      this.axios.get("http://127.0.0.1:8000/get_httpoperators", {
         headers: {
           token: localStorage.token
-        },
-        params: {
-          id: that.$route.params.id
         }
       }).then(function (response) {
         console.log(response)
-        that.tableData = response.data.data.tasks;
+        that.tableData = response.data.data.httpoperators;
       })
     }
   },
 
   data() {
     return {
-      tableData: []
+      tableData: [],
+      comName: [],
+      ID: 0
     }
   },
 }
